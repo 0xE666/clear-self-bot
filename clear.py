@@ -1,8 +1,8 @@
-import discord, asyncio
+import discord, asyncio, time
 
 client = discord.Client()
 
-token = TOKEN
+token = ""
 prefix = '!'
 
 @client.event
@@ -23,6 +23,7 @@ async def on_message(message):
             async for msg in channel.history(limit=9999):
                 try:
                   await msg.delete()
+                  time.sleep(1)
                 except Exception as x:
                     pass
         if message.content.startswith(prefix + "cleardms"):
@@ -32,6 +33,7 @@ async def on_message(message):
                         try:
                             if msg.author == client.user:
                                 await msg.delete()
+                                time.sleep(1)
                         except:
                              pass
         if message.content.startswith(prefix + "clearthis"):
@@ -40,6 +42,7 @@ async def on_message(message):
                     try:
                         if msg.author == client.user:
                             await msg.delete()
+                            time.sleep(1)
                     except:
                          pass
 
