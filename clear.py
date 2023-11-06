@@ -1,24 +1,33 @@
-import discord, asyncio, time
+import os
+import discord
+from discord.ext import commands
+import requests
+import json
+import time
 
-client = discord.Client()
 
 token = ""
 prefix = '!'
 
-@client.event
+bot = commands.Bot(command_prefix="",
+                   help_command=None,
+                   case_insensitive=True,
+                   self_bot=True)
+
+@bot.event
 async def on_ready():
     activity = discord.Game(name="clearing messages")
-    await client.change_presence(status=discord.Status.do_not_disturb, activity=activity)
+    await bot.change_presence(status=discord.Status.do_not_disturb, activity=activity)
     print('-' * 30)
     print('Logged in as: ')
-    print(client.user)
+    print(bot.user)
     print('-' * 30)
 
 
-@client.event
+@bot.event
 async def on_message(message):
     channel = message.channel
-    if message.author == client.user:
+    if message.author == bot.user:
         if message.content.startswith(prefix + "clear"):
             async for msg in channel.history(limit=9999):
                 try:
@@ -27,11 +36,11 @@ async def on_message(message):
                 except Exception as x:
                     pass
         if message.content.startswith(prefix + "cleardms"):
-            for channel in client.private_channels:
+            for channel in bot.private_channels:
                 if isinstance(channel, discord.DMChannel):
                     async for msg in channel.history(limit=9999):
                         try:
-                            if msg.author == client.user:
+                            if msg.author == bot.user:
                                 await msg.delete()
                                 time.sleep(1)
                         except:
@@ -40,10 +49,11 @@ async def on_message(message):
             if isinstance(channel, discord.DMChannel):
                 async for msg in channel.history(limit=9999):
                     try:
-                        if msg.author == client.user:
+                        if msg.author == bot.user:
                             await msg.delete()
                             time.sleep(1)
                     except:
                          pass
 
-client.run(token, bot=False)
+
+bot.run(token)
